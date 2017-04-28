@@ -1,0 +1,44 @@
+#mutation #body {
+  height: 600px;
+  display: flex; }
+  #mutation #body .thread {
+    padding: 10px;
+    overflow-y: scroll; }
+
+#bar {
+  background: #333;
+  width: 200px;
+  display: flex;
+  flex-direction: column; }
+  #bar hr {
+    width: 100%;
+    margin: 0; }
+  #bar > div {
+    padding: 5px; }
+  #bar > div * {
+    padding: 5px;
+    margin: 0;
+    font-weight: normal;
+    color: #fff; }
+  #bar #head {
+    text-align: center; }
+  #bar #head, #bar #stat, #bar #media {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+  #bar #track {
+    position: relative;
+    flex-basis: auto;
+    flex-grow: 1;
+    overflow-y: scroll; }
+    #bar #track h5 {
+      cursor: pointer; }
+  #bar #player {
+    height: 88px;
+    width: 156px;
+    padding: 10px; }
+
+/*# sourceMappingURL=global.css.map */

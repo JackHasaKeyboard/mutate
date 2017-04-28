@@ -1,0 +1,134 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+				integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+		crossorigin="anonymous"></script>
+
+<script>
+var track = JSON.parse(localStorage.getItem('track'));
+
+var tag = document.createElement('script');
+
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+var player;
+
+function onYouTubeIframeAPIReady() {
+	player = new YT.Player('player', {
+		videoId: track[0].id,
+		events: {
+			'onReady': onPlayerReady,
+			'onStateChange': onPlayerStateChange
+		},
+		playerVars: {
+			enablejsapi: 1,
+			controls: 0,
+			showinfo: 0
+		}
+	});
+}
+
+var done = false;
+function onPlayerStateChange(event) {
+}
+
+function stopVideo() {
+	player.stopVideo();
+}
+
+function onPlayerReady(event) {
+	var i = 0;
+	var target = 0;
+
+	function selectTrack() {
+		$('#track h5:eq(' + i + ')').css('text-decoration', 'underline');
+		$('#track h5:not(:eq(' + i + '))').css('text-decoration', '');
+
+		$('#track').scrollTop(-target);
+
+		var target = $('#track h5').eq(i).position().top - 4;
+
+		$('#track').scrollTop(target);
+	}
+
+	selectTrack();
+
+	/* input */
+	$('#track h5').click(function() {
+		i = $(this).index();
+
+		selectTrack();
+	});
+
+	/* $('#next').click(function() {
+		if(i < track.length - 1) {
+			i++;
+
+			selectTrack();
+		}
+	});
+
+	$('#prev').click(function() {
+		if(i > 0) {
+			i--;
+
+			selectTrack();
+		}
+	}); */
+
+	$(document).keydown(function(e) {
+		switch(e.which) {
+			case 13: // enter
+				e.preventDefault();
+
+				player.loadVideoById(track[i].id);
+
+				break;
+
+			case 32: // space
+				e.preventDefault();
+
+				switch(player.getPlayerState()) {
+					case 5:
+						player.playVideo();
+
+						break;
+
+					case 2:
+						player.playVideo();
+
+						break;
+
+					case 1:
+						player.pauseVideo();
+
+						break;
+				}
+
+				break;
+
+			case 78: // n
+				if (i < track.length - 1) {
+					e.preventDefault();
+
+					i++;
+
+					selectTrack();
+				}
+
+				break;
+
+			case 80: // p
+				if (i > 0) {
+					e.preventDefault();
+
+					i--;
+
+					selectTrack();
+				}
+
+				break;
+		}
+	});
+}
+</script>

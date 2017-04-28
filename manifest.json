@@ -1,0 +1,25 @@
+{
+	"manifest_version": 2,
+	"name": "Mutate",
+	"version": "0.1",
+	"content_scripts": [
+		{
+			"matches": [
+				"http://boards.4chan.org/mu/thread/*"
+			],
+			"js": [
+				"script/jquery-3.2.1.min.js",
+				"script/content.js"
+			],
+			"css": [
+				"style/global.css"
+			],
+			"run_at": "document_end"
+		}
+	],
+	"web_accessible_resources": [
+		"html/*",
+		"img/*",
+		"saved.json"
+	]
+}
