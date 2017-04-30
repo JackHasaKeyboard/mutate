@@ -4,7 +4,6 @@ $('.thread').wrap('<div id="mutation"><div id="body"></div></div>');
 $('#body').prepend($('<div id="bar"></div>').load(chrome.extension.getURL('html/bar.html')));
 
 var youtubeVid = new RegExp('(?:youtube\.com\/watch\\?v=|youtu\.?be\/)([^ ]+)');
-var timeMS = new RegExp('PT([0-9]+)M([0-9]+)S');
 
 var key = '***REMOVED***'
 
@@ -14,6 +13,23 @@ $.ajaxSetup({
 
 track = []
 
+function ISO8601ToS(iso) {
+	var reptms = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/;
+	var h = 0, m = 0, s = 0, totalS;
+
+	if (reptms.test(iso)) {
+		var matches = reptms.exec(iso);
+
+		if (matches[1]) h = Number(matches[1]);
+		if (matches[2]) m = Number(matches[2]);
+		if (matches[3]) s = Number(matches[3]);
+
+		totalS = h * 3600 + m * 60 + s;
+	}
+
+	return(totalS);
+}
+
 $('.thread .postContainer .post .postMessage').each(function() {
 	if(youtubeVid.test($(this).text())) {
 		var id = $(this).text().match(youtubeVid)[1];
@@ -22,7 +38,7 @@ $('.thread .postContainer .post .postMessage').each(function() {
 			track.push({
 				id: id,
 				title: data.items[0].snippet.title,
-				length: parseInt(data.items[0].contentDetails.duration.match(timeMS)[1]) * 60 + parseInt(data.items[0].contentDetails.duration.match(timeMS)[2])
+				length: ISO8601ToS(data.items[0].contentDetails.duration)
 			});
 		});
 	}
@@ -39,9 +55,9 @@ $(document).ready(function() {
 		t++;
 	});
 
-	var time = Math.floor(runtime / 3600) + ':' + Math.floor(runtime / 60) % 60 + ':' + runtime % 60
+	var hms = new Date(runtime * 1000).toISOString().substr(11, 8);
 
-	$('#stat').text(track.length + ' songs, ' + time);
+	$('#stat').text(track.length + ' songs, ' + hms);
 });
 
 localStorage.setItem('track', JSON.stringify(track));

@@ -23,7 +23,8 @@ function onYouTubeIframeAPIReady() {
 		playerVars: {
 			enablejsapi: 1,
 			controls: 0,
-			showinfo: 0
+			showinfo: 0,
+			disableKB: 1
 		}
 	});
 }
@@ -78,6 +79,28 @@ function onPlayerReady(event) {
 
 	$(document).keydown(function(e) {
 		switch(e.which) {
+			case 78: // n
+				if (i < track.length - 1) {
+					e.preventDefault();
+
+					i++;
+
+					selectTrack();
+				}
+
+				break;
+
+			case 80: // p
+				if (i > 0) {
+					e.preventDefault();
+
+					i--;
+
+					selectTrack();
+				}
+
+				break;
+
 			case 13: // enter
 				e.preventDefault();
 
@@ -103,28 +126,6 @@ function onPlayerReady(event) {
 						player.pauseVideo();
 
 						break;
-				}
-
-				break;
-
-			case 78: // n
-				if (i < track.length - 1) {
-					e.preventDefault();
-
-					i++;
-
-					selectTrack();
-				}
-
-				break;
-
-			case 80: // p
-				if (i > 0) {
-					e.preventDefault();
-
-					i--;
-
-					selectTrack();
 				}
 
 				break;
