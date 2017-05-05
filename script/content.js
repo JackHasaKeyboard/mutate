@@ -3,7 +3,7 @@ $('.thread').wrap('<div id="mutation"><div id="body"></div></div>');
 /* bar */
 $('#body').prepend($('<div id="bar"></div>').load(chrome.extension.getURL('html/bar.html')));
 
-var youtubeVid = new RegExp('(?:youtube\.com\/watch\\?v=|youtu\.?be\/)([^ ]+)');
+var youtubeVid = new RegExp('(?:youtube\.com\/watch\\?v=|youtu\.?be\/)([^ ]+)', 'g');
 
 var key = '***REMOVED***'
 
@@ -31,12 +31,10 @@ function ISO8601ToS(iso) {
 }
 
 $('.thread .postContainer .post .postMessage').each(function() {
-	if(youtubeVid.test($(this).text())) {
-		var id = $(this).text().match(youtubeVid)[1];
-
+	while (id = youtubeVid.exec($(this).text())) {
 		$.getJSON('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&key=' + key + '&part=snippet,contentDetails', function(data) {
 			track.push({
-				id: id,
+				id: id[1],
 				title: data.items[0].snippet.title,
 				length: ISO8601ToS(data.items[0].contentDetails.duration)
 			});
