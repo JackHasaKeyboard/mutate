@@ -17,8 +17,7 @@ function onYouTubeIframeAPIReady() {
 	player = new YT.Player('player', {
 		videoId: track[0].id,
 		events: {
-			'onReady': onPlayerReady,
-			'onStateChange': onPlayerStateChange
+			'onReady': onPlayerReady
 		},
 		playerVars: {
 			enablejsapi: 1,
@@ -29,17 +28,12 @@ function onYouTubeIframeAPIReady() {
 	});
 }
 
-var done = false;
-function onPlayerStateChange(event) {
-}
-
 function stopVideo() {
 	player.stopVideo();
 }
 
 function onPlayerReady(event) {
-	var i = 0;
-	var target = 0;
+	var i = 0, target = 0;
 
 	function selectTrack() {
 		$('#track h5:eq(' + i + ')').css('text-decoration', 'underline');
