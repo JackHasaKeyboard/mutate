@@ -9,6 +9,7 @@
 			],
 			"js": [
 				"script/jquery-3.2.1.min.js",
+				"script/key.js",
 				"script/content.js"
 			],
 			"css": [
