@@ -5,7 +5,7 @@ $('#body').prepend($('<div id="bar"></div>').load(chrome.extension.getURL('html/
 
 var youtubeVid = new RegExp('(?:youtube\.com\/watch\\?v=|youtu\.?be\/)([^ ]+)', 'g');
 
-var key = '***REMOVED***'
+var key = ''
 
 $.ajaxSetup({
 	async: false
