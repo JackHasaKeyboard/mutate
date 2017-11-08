@@ -30,35 +30,63 @@ function ISO8601ToS(iso) {
 	return(totalS);
 }
 
-$('.thread .postContainer .post .postMessage').each(function() {
-	while (id = youtubeVid.exec($(this).text())) {
-		$.getJSON('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&key=' + key + '&part=snippet,contentDetails', function(data) {
-			track.push({
-				id: id[1],
-				title: data.items[0].snippet.title,
-				length: ISO8601ToS(data.items[0].contentDetails.duration)
+try {
+	$('.thread .postContainer .post .postMessage').each(function() {
+		while (id = youtubeVid.exec($(this).text())) {
+			$.getJSON('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&key=' + key + '&part=snippet,contentDetails', function(data) {
+				track.push({
+					id: id[1],
+					title: data.items[0].snippet.title,
+					length: ISO8601ToS(data.items[0].contentDetails.duration)
+				});
 			});
-		});
-	}
-});
-
-$(document).ready(function() {
-	var runtime = 0;
-
-	$.each(track, function(t) {
-		$('#bar #track').append('<h5>' + track[t].title + '</h5>');
-
-		runtime += track[t].length
-
-		t++;
+		}
 	});
 
-	var hms = new Date(runtime * 1000).toISOString().substr(11, 8);
+	$(document).ready(function() {
+		var runtime = 0;
 
-	$('#stat').text(track.length + ' songs, ' + hms);
-});
+		$.each(track, function(t) {
+			$('#bar #track').append('<h5>' + track[t].title + '</h5>');
 
-localStorage.setItem('track', JSON.stringify(track));
+			runtime += track[t].length
 
-// iframe api
-$('#mutation').append($('<div id="player"></div>').load(chrome.extension.getURL('html/youtubePlayer.html')));
+			t++;
+		});
+
+		var hms = new Date(runtime * 1000).toISOString().substr(11, 8);
+
+		$('#stat').text(track.length + ' songs, ' + hms);
+	});
+
+	localStorage.setItem('track', JSON.stringify(track));
+
+	// iframe api
+	$('#mutation').append($('<div id="player"></div>').load(chrome.extension.getURL('html/youtubePlayer.html')));
+}
+
+catch(err) {
+	switch(err.name) {
+		case 'ReferenceError':
+			var alert = [
+				'Hey there! You need to set your API key',
+				'Follow the installation instructions <a href="https://github.com/JackHasaKeyboard/mutate/blob/master/README.md">here</a>'
+			]
+
+			break;
+
+		default:
+			var alert = [
+				'Unhandled error :L',
+				'Make a bug report <a href="https://github.com/JackHasaKeyboard/mutate/issues">here</a>'
+			]
+
+			break;
+	}
+
+	$(document).ready(function() {
+		$.each(alert, function(i, line) {
+			$('#bar #track').append('<h5>' + line + '</h5>')
+		});
+	});
+}
